@@ -10,7 +10,7 @@ import (
 
 func main() {
 	if len(os.Args) < 3 {
-		fmt.Fprintln(os.Stderr, "Usage: aroe DIRECTORY COMMAND [ARGS…]")
+		fmt.Fprintln(os.Stderr, "Usage: aroc DIRECTORY COMMAND [ARGS…]")
 		os.Exit(1)
 	}
 
