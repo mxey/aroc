@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/howeyc/fsnotify"
+	"github.com/sdegutis/go.fsevents"
 	"log"
 	"os"
 	"os/exec"
@@ -14,28 +14,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer watcher.Close()
-
-	err = watcher.Watch(os.Args[1])
-	if err != nil {
-		log.Fatal(err)
-	}
+	ch := fsevents.WatchPaths([]string{os.Args[1]})
 
 	var cmd *exec.Cmd
 
 	go func() {
-		for {
-			select {
-			case _ = <-watcher.Event:
-				log.Println("Changes in directory, restarting")
-				cmd.Process.Signal(os.Interrupt)
-			case err := <-watcher.Error:
-				log.Fatal("error:", err)
-			}
+		for _ = range ch {
+			log.Println("Changes in directory, restarting")
+			cmd.Process.Signal(os.Interrupt)
 		}
 	}()
 
