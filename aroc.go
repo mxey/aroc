@@ -10,7 +10,7 @@ import (
 
 func main() {
 	if len(os.Args) < 3 {
-		fmt.Fprintln(os.Stderr, "Usage: aroc DIRECTORY COMMAND [ARGS…]")
+		fmt.Fprintln(os.Stderr, "Usage: aroc DIRECTORY|FILE COMMAND [ARGS…]")
 		os.Exit(1)
 	}
 
@@ -20,7 +20,7 @@ func main() {
 
 	go func() {
 		for _ = range ch {
-			log.Println("Changes in directory, restarting")
+			log.Println("Changes detected, restarting")
 			cmd.Process.Signal(os.Interrupt)
 		}
 	}()
