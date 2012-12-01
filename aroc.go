@@ -31,7 +31,7 @@ func main() {
 		cmd.Stdout, cmd.Stderr = os.Stdout, os.Stderr
 		err := cmd.Run()
 		if err != nil {
-			if err, ok := err.(*exec.ExitError); !ok {
+			if _, ok := err.(*exec.ExitError); !ok {
 				log.Fatal(err)
 			}
 		}
