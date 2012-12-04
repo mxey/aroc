@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"time"
 )
 
 func main() {
@@ -20,6 +21,17 @@ func main() {
 
 	go func() {
 		for _ = range ch {
+
+		WAIT:
+			// Wait 1 second in case multiple events occur in quick succession
+			for {
+				select {
+				case <-ch:
+				case <-time.After(1 * time.Second):
+					break WAIT
+				}
+			}
+
 			log.Println("Changes detected, restarting")
 			cmd.Process.Signal(os.Interrupt)
 		}
